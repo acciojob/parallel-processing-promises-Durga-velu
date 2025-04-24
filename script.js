@@ -1,7 +1,7 @@
 //your JS code here. If required.
 const output = document.getElementById("output");
 const btn = document.getElementById("download-images-button");
-const body = document.querySelector(body);
+
 const images = [
   { url: "https://picsum.photos/id/237/200/300" },
   { url: "https://picsum.photos/id/238/200/300" },
@@ -10,41 +10,57 @@ const images = [
 
 
 
-btn.addEventListener(("click"),(e)=>{
- e.preventDefault();
+let promises=()=>{
+    return new Promise((resolve,reject)=>{
 
-let promise=new Promise((resolve,reject)=>{
+let img=images.map((img)=>{
+          if(img){
+          resolve (img)
+          }
+          else{
+          reject("images are not downloading");
+          }
+        })
 
-  return images.forEach((img)=>{
-           if(img){
-            resolve (img)
-           }
-           else{
-            reject(error)
-           }
+        
     })
+}
+
+
+btn.addEventListener(("click"),(e)=>{
+ 
+
+
+ output.innerHTML="Images are Downloading"
+
+
+
+Promise.all(promises).then(res=>{
+
+output.innerHTML=""
+const image=res.forEach(items=>{
+    `<img src=${items.url}>`
 })
-
-Promise.all(promise).then((response)=>{
-
-    let img=document.createElement("img");
-
-img.innerHTML=`
-<img src="${response}" alt="">
-`
-output.appendChild(img)
+output.appendChild(image)
 
 }).catch((error)=>{
 
+output.innerHTML=""
 
-    let errormsg=document.createElement("div");
-    errormsg.innerHTML=error
-    body.appendChild(errormsg)
- 
+output.innerHTML=error
+})
+
+
+
+
+
+
 
 })
 
-})
+
+
+
 
 
 
