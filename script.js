@@ -10,39 +10,37 @@ const images = [
 
 
 
-let promises=()=>{
+let downloadImage =(img)=>{
     return new Promise((resolve,reject)=>{
+  const image = new Image();
+		image.src=img.url
 
-let img=images.map((img)=>{
-          if(img){
-          resolve (img)
-          }
-          else{
-          reject("images are not downloading");
-          }
-        })
+		image.onload=()=>resolve(img);
+		image.onerror=()=>reject(`Failed to load image at ${img.url}`)
+
 
         
     })
 }
 
+const promises = images.map(downloadImage);
 
 btn.addEventListener(("click"),(e)=>{
  
 
 
- output.innerHTML="Images are Downloading"
+ output.innerHTML="Images are Downloading...."
 
 
 
 Promise.all(promises).then(res=>{
 
 output.innerHTML=""
-const image=res.forEach(items=>{
-    `<img src=${items.url}>`
+res.forEach(items=>{
+   const imgElement = document.createElement("img");
+        imgElement.src = items.url;
+        output.appendChild(imgElement);
 })
-output.appendChild(image)
-
 }).catch((error)=>{
 
 output.innerHTML=""
